@@ -112,12 +112,65 @@ async function submitForm(e) {
     e.preventDefault();
 
     const btn = document.getElementById('submitBtn');
-    const msg = document.getElementById('messageBox');
 
-    // Saat seçilmiş mi?
+    // Validasyon alanları
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const serviceInput = document.getElementById('service');
+    const dateInput = document.getElementById('date');
+
+    // 1. İsim Kontrolü
+    if (!nameInput.value.trim() || nameInput.validity.patternMismatch) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Dikkat!',
+            text: 'Lütfen geçerli bir Ad Soyad giriniz (Sadece harf).',
+            confirmButtonColor: '#e94560'
+        });
+        return false;
+    }
+
+    // 2. Telefon Kontrolü
+    if (!phoneInput.value.trim() || phoneInput.value.length < 10 || phoneInput.validity.patternMismatch) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Dikkat!',
+            text: 'Lütfen geçerli bir telefon numarası giriniz (En az 10 rakam).',
+            confirmButtonColor: '#e94560'
+        });
+        return false;
+    }
+
+    // 3. Hizmet Kontrolü
+    if (!serviceInput.value) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Dikkat!',
+            text: 'Lütfen almak istediğiniz hizmeti seçiniz.',
+            confirmButtonColor: '#e94560'
+        });
+        return false;
+    }
+
+    // 4. Tarih Kontrolü
+    if (!dateInput.value) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Dikkat!',
+            text: 'Lütfen bir tarih seçiniz.',
+            confirmButtonColor: '#e94560'
+        });
+        return false;
+    }
+
+    // 5. Saat Kontrolü
     if (!selectedTime) {
-        msg.className = 'message-box error';
-        msg.textContent = '❌ Lütfen bir saat seçin!';
+        Swal.fire({
+            icon: 'warning',
+            title: 'Saat Seçmediniz!',
+            text: 'Lütfen randevu için uygun bir saat seçiniz.',
+            confirmButtonColor: '#e94560'
+        });
         return false;
     }
 
@@ -125,10 +178,10 @@ async function submitForm(e) {
     btn.textContent = '⏳ Randevu oluşturuluyor...';
 
     const formData = {
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
-        service: document.getElementById('service').value,
-        date: document.getElementById('date').value,
+        name: nameInput.value,
+        phone: phoneInput.value,
+        service: serviceInput.value,
+        date: dateInput.value,
         time: selectedTime
     };
 
@@ -142,15 +195,26 @@ async function submitForm(e) {
         const data = await res.json();
 
         if (res.ok) {
-            msg.className = 'message-box success';
-            msg.textContent = data.message || '✅ Randevunuz oluşturuldu!';
+            Swal.fire({
+                icon: 'success',
+                title: 'Harika!',
+                text: data.message || 'Randevunuz başarıyla oluşturuldu!',
+                confirmButtonColor: '#1a1a2e',
+                background: '#fff url(/images/trees.png)'
+            }).then(() => {
+                // Formu gizle, başarı mesajını göster
+                document.getElementById('appointmentForm').style.display = 'none';
+                document.getElementById('successActions').style.display = 'block';
+            });
 
-            // Formu gizle, başarı mesajını göster
-            document.getElementById('appointmentForm').style.display = 'none';
-            document.getElementById('successActions').style.display = 'block';
         } else {
-            msg.className = 'message-box error';
-            msg.textContent = '❌ ' + (data.error || 'Bir hata oluştu');
+            Swal.fire({
+                icon: 'error',
+                title: 'Hata!',
+                text: data.error || 'Bir hata oluştu.',
+                confirmButtonColor: '#dc3545'
+            });
+
             btn.disabled = false;
             btn.textContent = '✅ Randevuyu Onayla';
 
@@ -160,8 +224,12 @@ async function submitForm(e) {
             }
         }
     } catch (err) {
-        msg.className = 'message-box error';
-        msg.textContent = '❌ Sunucu hatası, lütfen tekrar deneyin.';
+        Swal.fire({
+            icon: 'error',
+            title: 'Sunucu Hatası',
+            text: 'Bir sorun oluştu, lütfen daha sonra tekrar deneyin.',
+            confirmButtonColor: '#dc3545'
+        });
         btn.disabled = false;
         btn.textContent = '✅ Randevuyu Onayla';
         console.error(err);

@@ -67,9 +67,9 @@ async function loadAppointments() {
         data.forEach(apt => {
             const tr = document.createElement('tr');
             const badgeClass = apt.status === 'aktif' ? 'badge-aktif' :
-                               apt.status === 'iptal' ? 'badge-iptal' : 'badge-tamamlandi';
+                apt.status === 'iptal' ? 'badge-iptal' : 'badge-tamamlandi';
             const statusText = apt.status === 'tamamlandı' ? 'Tamamlandı' :
-                               apt.status === 'aktif' ? 'Aktif' : 'İptal';
+                apt.status === 'aktif' ? 'Aktif' : 'İptal';
 
             tr.innerHTML = `
                 <td><strong>#${apt.id}</strong></td>
@@ -84,7 +84,9 @@ async function loadAppointments() {
                         ${apt.status === 'aktif' ? `
                             <button class="btn-icon success" title="Tamamlandı" onclick="updateStatus(${apt.id}, 'tamamlandı')">✓</button>
                             <button class="btn-icon danger" title="İptal Et" onclick="cancelAppointment(${apt.id}, '${escapeHtml(apt.name)}')">✕</button>
-                        ` : ''}
+                        ` : `
+                            <button class="btn-icon danger" title="Kalıcı Olarak Sil" onclick="deletePermanently(${apt.id})">🗑️</button>
+                        `}
                     </div>
                 </td>
             `;
@@ -103,6 +105,16 @@ function cancelAppointment(id, name) {
     document.getElementById('modalTitle').textContent = 'Randevu İptal';
     document.getElementById('modalMessage').textContent = `${name} adlı kişinin randevusunu iptal etmek istediğinize emin misiniz?`;
     document.getElementById('modalConfirmBtn').textContent = 'İptal Et';
+    document.getElementById('modalConfirmBtn').className = 'btn btn-sm btn-danger';
+    openModal();
+}
+
+// ─── KALICI SİLME ───
+function deletePermanently(id) {
+    pendingAction = { type: 'delete', id };
+    document.getElementById('modalTitle').textContent = '⚠️ Kalıcı Silme';
+    document.getElementById('modalMessage').textContent = 'Bu kayıt veritabanından tamamen silinecek. Bu işlem geri alınamaz!';
+    document.getElementById('modalConfirmBtn').textContent = 'Kalıcı Olarak Sil';
     document.getElementById('modalConfirmBtn').className = 'btn btn-sm btn-danger';
     openModal();
 }
@@ -137,18 +149,22 @@ function closeModal() {
 async function confirmAction() {
     if (!pendingAction) return;
 
-    if (pendingAction.type === 'cancel') {
-        try {
-            const res = await fetch(`/api/appointments/${pendingAction.id}`, {
-                method: 'DELETE'
-            });
+    let url = `/api/appointments/${pendingAction.id}`;
 
-            if (res.ok) {
-                loadData();
-            }
-        } catch (err) {
-            console.error(err);
+    if (pendingAction.type === 'delete') {
+        url += '?force=true';
+    }
+
+    try {
+        const res = await fetch(url, {
+            method: 'DELETE'
+        });
+
+        if (res.ok) {
+            loadData();
         }
+    } catch (err) {
+        console.error(err);
     }
 
     closeModal();

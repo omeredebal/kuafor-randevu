@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuaför Studio | Profesyonel Saç & Güzellik</title>
+    <title>Kuaför Studio | Premium Erkek Kuaförü</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
@@ -15,7 +18,7 @@
         </a>
         <ul class="nav-links" id="navLinks">
             <li><a href="#hizmetler">Hizmetler</a></li>
-            <li><a href="#fiyatlar">Fiyatlar</a></li>
+            <li><a href="#iletisim">İletişim</a></li>
             <li><a href="#ozellikler">Neden Biz?</a></li>
             <li><a href="/randevu" class="btn-nav">📅 Randevu Al</a></li>
         </ul>
@@ -27,9 +30,9 @@
     <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
-            <div class="hero-badge">✨ Premium Kuaför Deneyimi</div>
-            <h1>Stilinize <span class="highlight">Değer</span> Katıyoruz</h1>
-            <p>Profesyonel ekibimiz ile saç kesimi, boyama, bakım ve daha fazlası. Online randevu ile bekleme yok!</p>
+            <div class="hero-badge">✨ Premium Erkek Bakımı</div>
+            <h1>Tarzını <span class="highlight">Yansıt</span>, Farkını <span class="highlight">Göster</span></h1>
+            <p>Modern saç kesimi, sakal tasarımı ve profesyonel bakım hizmetleriyle kendinizi özel hissedin.</p>
             <div class="hero-buttons">
                 <a href="/randevu" class="btn btn-primary">📅 Hemen Randevu Al</a>
                 <a href="#hizmetler" class="btn btn-outline">Hizmetlerimiz →</a>
@@ -40,29 +43,25 @@
     <!-- HİZMETLER -->
     <section class="section" id="hizmetler">
         <div class="section-title">
-            <h2>Hizmetlerimiz & <span class="highlight">Fiyatlar</span></h2>
-            <p>Size özel profesyonel hizmetlerimizi keşfedin</p>
+            <h2>Profesyonel <span class="highlight">Hizmetlerimiz</span></h2>
+            <p>Erkek bakımında uzman dokunuşlar</p>
         </div>
-        <div class="services-grid" id="fiyatlar">
+        <div class="services-grid">
             {% for h in hizmetler %}
             <div class="service-card">
                 <div class="service-icon">
-                    {% if 'Kesim' in h.ad and 'Erkek' in h.ad %}💇‍♂️
-                    {% elif 'Kesim' in h.ad and 'Kadın' in h.ad %}💇‍♀️
-                    {% elif 'Boya' in h.ad %}🎨
-                    {% elif 'Fön' in h.ad %}💨
-                    {% elif 'Keratin' in h.ad %}✨
+                    {% if 'Kesim' in h.ad and 'Sakal' in h.ad %}✂️🧔
+                    {% elif 'Saç Kesimi' in h.ad %}✂️
                     {% elif 'Sakal' in h.ad %}🧔
-                    {% elif 'Manikür' in h.ad %}💅
-                    {% elif 'Pedikür' in h.ad %}🦶
-                    {% elif 'Ağda' in h.ad %}🌿
-                    {% elif 'Cilt' in h.ad %}🧴
+                    {% elif 'Çocuk' in h.ad %}🧒
+                    {% elif 'Boya' in h.ad %}🎨
+                    {% elif 'Cilt' in h.ad %}🧖‍♂️
+                    {% elif 'Keratin' in h.ad %}✨
+                    {% elif 'Damat' in h.ad %}🤵
                     {% else %}💈
                     {% endif %}
                 </div>
                 <h3>{{ h.ad }}</h3>
-                <div class="price">₺{{ h.fiyat }}</div>
-                <div class="duration">⏱️ {{ h.sure }} dakika</div>
             </div>
             {% endfor %}
         </div>
@@ -71,38 +70,57 @@
     <!-- ÖZELLİKLER -->
     <section class="section" id="ozellikler">
         <div class="section-title">
-            <h2>Neden <span class="highlight">Bizi Seçmelisiniz?</span></h2>
-            <p>Müşteri memnuniyeti bizim önceliğimiz</p>
+            <h2>Neden <span class="highlight">Kuaför Studio?</span></h2>
+            <p>Sadece tıraş değil, bir deneyim sunuyoruz</p>
         </div>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="icon">🌐</div>
-                <h3>Online Randevu</h3>
-                <p>7/24 online randevu alabilir, bekleme zahmetinden kurtulabilirsiniz.</p>
+                <div class="icon">🏆</div>
+                <h3>Ustalık & Deneyim</h3>
+                <p>Alanında uzman ekibimizle saçınıza hak ettiği değeri veriyoruz.</p>
             </div>
             <div class="feature-card">
-                <div class="icon">👨‍🎨</div>
-                <h3>Uzman Ekip</h3>
-                <p>Alanında uzman ve deneyimli kuaförlerimiz ile güvendesiniz.</p>
+                <div class="icon">🛋️</div>
+                <h3>Konforlu Ortam</h3>
+                <p>Modern ve ferah salonumuzda rahatlayın, kahvenizi yudumlayın.</p>
             </div>
             <div class="feature-card">
-                <div class="icon">💎</div>
-                <h3>Premium Ürünler</h3>
-                <p>Saçınızın sağlığı için sadece en kaliteli ürünleri kullanıyoruz.</p>
+                <div class="icon">🧼</div>
+                <h3>Hijyenik Hizmet</h3>
+                <p>Tek kullanımlık ürünler ve sterilizasyon standartlarımızla sağlığınız güvende.</p>
             </div>
             <div class="feature-card">
-                <div class="icon">⏰</div>
-                <h3>Çalışma Saatleri</h3>
-                <p>Hafta içi ve hafta sonu 09:00 - 19:00 arası hizmetinizdeyiz.</p>
+                <div class="icon">📅</div>
+                <h3>Kolay Randevu</h3>
+                <p>Sıra beklemeden, dilediğiniz zaman ve saatte randevunuzu oluşturun.</p>
             </div>
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="section" style="text-align: center;">
+    <!-- İLETİŞİM & FİYAT BİLGİSİ -->
+    <section class="section" id="iletisim"
+        style="text-align: center; background: rgba(255,255,255,0.02); border-radius: 20px;">
         <div class="section-title">
-            <h2>Hemen <span class="highlight">Randevu</span> Alın</h2>
-            <p>Birkaç adımda randevunuzu oluşturun, biz sizi bekleyelim!</p>
+            <h2>Fiyat Bilgisi & <span class="highlight">İletişim</span></h2>
+            <p>Fiyat listemiz ve detaylı bilgi için bize ulaşabilirsiniz</p>
+        </div>
+        <div class="contact-buttons" style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+            <a href="https://wa.me/905320000000" target="_blank" class="btn"
+                style="background: #25D366; color: white; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;">
+                <i class="fab fa-whatsapp" style="font-size: 1.4rem;"></i> WhatsApp'tan Sor
+            </a>
+            <a href="tel:+905320000000" class="btn"
+                style="background: #3498db; color: white; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;">
+                <i class="fas fa-phone-alt"></i> Hemen Ara
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section" style="text-align: center; margin-top: 2rem;">
+        <div class="section-title">
+            <h2>Tarzınızı <span class="highlight">Yenileyin</span></h2>
+            <p>Yerini ayırt, bekleme derdine son ver!</p>
         </div>
         <a href="/randevu" class="btn btn-gold" style="font-size: 1.1rem; padding: 1rem 3rem;">
             📅 Randevu Oluştur
@@ -111,7 +129,7 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <div class="brand">✂️ Kuaför Studio</div>
+        <div class="brand">💈 Kuaför Studio</div>
         <p>© 2026 Kuaför Studio. Tüm hakları saklıdır.</p>
         <p style="margin-top: 0.5rem;">📍 İstanbul | 📞 0532 000 00 00 | 🕐 09:00 - 19:00</p>
     </footer>
@@ -140,4 +158,5 @@
         });
     </script>
 </body>
+
 </html>

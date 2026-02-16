@@ -22,16 +22,14 @@ ADMIN_PASSWORD = "admin123"
 
 # ─── Hizmetler ve fiyatlar ───
 HIZMETLER = [
-    {"id": 1, "ad": "Saç Kesimi (Erkek)", "fiyat": 250, "sure": 30},
-    {"id": 2, "ad": "Saç Kesimi (Kadın)", "fiyat": 400, "sure": 45},
-    {"id": 3, "ad": "Saç Boyama", "fiyat": 800, "sure": 90},
-    {"id": 4, "ad": "Fön", "fiyat": 200, "sure": 30},
-    {"id": 5, "ad": "Keratin Bakım", "fiyat": 1500, "sure": 120},
-    {"id": 6, "ad": "Sakal Tıraşı", "fiyat": 150, "sure": 20},
-    {"id": 7, "ad": "Manikür", "fiyat": 300, "sure": 45},
-    {"id": 8, "ad": "Pedikür", "fiyat": 350, "sure": 60},
-    {"id": 9, "ad": "Ağda", "fiyat": 500, "sure": 60},
-    {"id": 10, "ad": "Cilt Bakımı", "fiyat": 600, "sure": 60},
+    {"id": 1, "ad": "Saç Kesimi", "fiyat": 0, "sure": 30},
+    {"id": 2, "ad": "Sakal Tasarımı", "fiyat": 0, "sure": 15},
+    {"id": 3, "ad": "Saç & Sakal Kesimi", "fiyat": 0, "sure": 45},
+    {"id": 4, "ad": "Çocuk Tıraşı", "fiyat": 0, "sure": 30},
+    {"id": 5, "ad": "Saç Boyama (Erkek)", "fiyat": 0, "sure": 60},
+    {"id": 6, "ad": "Cilt Bakımı & Maske", "fiyat": 0, "sure": 30},
+    {"id": 7, "ad": "Keratin Bakım", "fiyat": 0, "sure": 45},
+    {"id": 8, "ad": "Damat Tıraşı", "fiyat": 0, "sure": 60},
 ]
 
 
@@ -306,19 +304,29 @@ def get_appointments():
 # --- Randevu iptal et ---
 @app.route("/api/appointments/<int:appointment_id>", methods=["DELETE"])
 def delete_appointment(appointment_id):
+    force = request.args.get("force", "false").lower() == "true"
     conn = get_db()
-    cursor = conn.execute(
-        "UPDATE appointments SET status = 'iptal' WHERE id = ? AND status = 'aktif'",
-        (appointment_id,),
-    )
+    
+    if force:
+        # Kalıcı silme
+        cursor = conn.execute("DELETE FROM appointments WHERE id = ?", (appointment_id,))
+        message = "Randevu kalıcı olarak silindi"
+    else:
+        # Soft delete (İptal)
+        cursor = conn.execute(
+            "UPDATE appointments SET status = 'iptal' WHERE id = ? AND status = 'aktif'",
+            (appointment_id,),
+        )
+        message = "Randevu iptal edildi"
+        
     conn.commit()
 
     if cursor.rowcount == 0:
         conn.close()
-        return jsonify({"error": "Randevu bulunamadı veya zaten iptal edilmiş"}), 404
+        return jsonify({"error": "Randevu bulunamadı veya işlem yapılamadı"}), 404
 
     conn.close()
-    return jsonify({"message": "Randevu iptal edildi", "success": True})
+    return jsonify({"message": message, "success": True})
 
 
 # --- Randevu durumunu güncelle ---

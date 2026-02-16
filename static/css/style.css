@@ -11,11 +11,17 @@
     box-sizing: border-box;
 }
 
+.required {
+    color: #e74c3c;
+    margin-left: 2px;
+    font-weight: bold;
+}
+
 :root {
     --primary: #1a1a2e;
     --primary-light: #16213e;
-    --accent: #e94560;
-    --accent-hover: #c73550;
+    --accent: #c0392b;
+    --accent-hover: #a93226;
     --gold: #d4a574;
     --gold-light: #e8c9a0;
     --bg: #0f0f23;
@@ -33,6 +39,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -62,15 +69,20 @@ body::before {
     width: 200%;
     height: 200%;
     background: radial-gradient(circle at 20% 50%, rgba(233, 69, 96, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 50% 80%, rgba(233, 69, 96, 0.03) 0%, transparent 50%);
+        radial-gradient(circle at 80% 20%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(233, 69, 96, 0.03) 0%, transparent 50%);
     z-index: -1;
     animation: bgShift 20s ease-in-out infinite alternate;
 }
 
 @keyframes bgShift {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(-5%, -5%); }
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(-5%, -5%);
+    }
 }
 
 /* ─── NAVBAR ─── */
@@ -193,8 +205,11 @@ body::before {
 
 .hero-content {
     max-width: 700px;
+    width: 100%;
     position: relative;
     z-index: 1;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .hero-badge {
@@ -639,8 +654,15 @@ body::before {
 }
 
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .message-box.success {
@@ -915,7 +937,9 @@ body::before {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Modal */
@@ -1083,54 +1107,227 @@ body::before {
     display: block;
 }
 
-/* ─── RESPONSIVE ─── */
+/* ─── RESPONSIVE: TABLET (max-width: 1024px) ─── */
+@media (max-width: 1024px) {
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .calendar-grid {
+        grid-template-columns: 70px repeat(7, 1fr);
+        font-size: 0.75rem;
+    }
+
+    .section {
+        padding: 4rem 1.5rem;
+    }
+}
+
+/* ─── RESPONSIVE: MOBİL (max-width: 768px) ─── */
 @media (max-width: 768px) {
+
+    /* Navbar & Hamburger */
+    .navbar {
+        padding: 0.8rem 1.25rem;
+    }
+
+    .navbar.scrolled {
+        padding: 0.6rem 1.25rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .navbar-brand .icon {
+        font-size: 1.5rem;
+    }
+
     .hamburger {
         display: flex;
+        z-index: 1100;
+        position: relative;
     }
 
     .nav-links {
         position: fixed;
         top: 0;
-        right: -100%;
+        right: 0;
         width: 280px;
+        max-width: 80vw;
         height: 100vh;
-        background: var(--primary);
+        height: 100dvh;
+        background: rgba(20, 20, 40, 0.98);
+        backdrop-filter: blur(20px);
         flex-direction: column;
-        padding: 5rem 2rem 2rem;
+        align-items: stretch;
+        padding: 5rem 1.5rem 2rem;
         border-left: 1px solid var(--border);
-        transition: var(--transition);
-        z-index: 999;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(100%);
+        z-index: 1050;
+        box-shadow: -8px 0 30px rgba(0, 0, 0, 0.6);
+        gap: 0;
+        overflow-y: auto;
     }
 
     .nav-links.active {
-        right: 0;
+        transform: translateX(0);
+    }
+
+    .nav-links li {
+        display: block;
+        width: 100%;
+        list-style: none;
     }
 
     .nav-links a {
+        display: block;
         width: 100%;
-        padding: 1rem;
+        padding: 1rem 1rem;
+        font-size: 1rem;
+        border-bottom: 1px solid var(--border);
+        border-radius: 0;
+        text-align: left;
+        color: var(--text);
+    }
+
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--gold);
+    }
+
+    .nav-links .btn-nav {
+        margin-top: 1rem;
+        text-align: center;
+        border-bottom: none;
+        border-radius: 50px;
+        padding: 0.8rem 1.5rem;
+        display: block;
+    }
+
+    /* Hero */
+    .hero {
+        min-height: 85vh;
+        padding: 5rem 1.5rem 3rem;
     }
 
     .hero h1 {
-        font-size: 2.2rem;
+        font-size: 2rem;
+        line-height: 1.2;
     }
 
     .hero p {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-badge {
+        font-size: 0.75rem;
+        padding: 0.35rem 1rem;
+        letter-spacing: 1px;
     }
 
     .hero-buttons {
         flex-direction: column;
         align-items: center;
+        gap: 0.75rem;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+
+    /* Sections */
+    .section {
+        padding: 3rem 1.25rem;
     }
 
     .section-title h2 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
+    }
+
+    .section-title p {
+        font-size: 0.95rem;
+    }
+
+    /* Services Grid */
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .service-card {
+        padding: 1.25rem;
+    }
+
+    .service-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .service-card h3 {
+        font-size: 0.95rem;
+    }
+
+    /* Features Grid */
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+    }
+
+    /* Contact Buttons */
+    .contact-buttons {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .contact-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+
+    /* Booking Form */
+    .booking-page {
+        padding: 5rem 1rem 2rem;
     }
 
     .booking-card {
         padding: 1.5rem;
+    }
+
+    .booking-card h2 {
+        font-size: 1.4rem;
+    }
+
+    .time-slots {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.4rem;
+    }
+
+    .time-slot {
+        padding: 0.6rem 0.3rem;
+        font-size: 0.8rem;
+    }
+
+    /* Admin Panel */
+    .admin-page {
+        padding: 4.5rem 1rem 1.5rem;
     }
 
     .admin-header {
@@ -1138,31 +1335,206 @@ body::before {
         text-align: center;
     }
 
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .admin-header h1 {
+        font-size: 1.4rem;
     }
 
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .stat-card {
+        padding: 1rem;
+    }
+
+    .stat-card .number {
+        font-size: 1.8rem;
+    }
+
+    .stat-card .label {
+        font-size: 0.8rem;
+    }
+
+    /* Filters */
     .filters {
         flex-direction: column;
     }
 
+    .filters input,
+    .filters select,
+    .filters .btn {
+        width: 100%;
+    }
+
+    /* Table: Card layout on mobile */
+    .table-container {
+        border-radius: var(--radius-sm);
+    }
+
     .table th,
     .table td {
-        padding: 0.6rem 0.75rem;
-        font-size: 0.8rem;
+        padding: 0.6rem 0.5rem;
+        font-size: 0.78rem;
+    }
+
+    .table th:nth-child(3),
+    .table td:nth-child(3) {
+        display: none;
+        /* Hide phone on mobile */
+    }
+
+    /* Tabs */
+    .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+        padding: 0.65rem 1rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    /* Calendar */
+    .calendar-view {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .calendar-grid {
-        grid-template-columns: 60px repeat(7, 1fr);
+        grid-template-columns: 55px repeat(7, minmax(55px, 1fr));
+        min-width: 500px;
+    }
+
+    .calendar-cell {
+        font-size: 0.7rem;
+        padding: 0.35rem;
+    }
+
+    .calendar-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .calendar-header h3 {
+        font-size: 0.95rem;
+        width: 100%;
+        text-align: center;
+        order: -1;
+    }
+
+    /* Modal */
+    .modal {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .modal h3 {
+        font-size: 1.1rem;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .modal-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 2rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .footer .brand {
+        font-size: 1.1rem;
     }
 }
 
+/* ─── RESPONSIVE: KÜÇÜK MOBİL (max-width: 480px) ─── */
 @media (max-width: 480px) {
+    .hero {
+        min-height: 80vh;
+        padding: 4.5rem 1rem 2rem;
+    }
+
+    .hero h1 {
+        font-size: 1.65rem;
+    }
+
+    .hero p {
+        font-size: 0.9rem;
+    }
+
+    .section-title h2 {
+        font-size: 1.35rem;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .service-card {
+        padding: 1rem;
+    }
+
+    .service-icon {
+        font-size: 1.75rem;
+    }
+
+    .service-card h3 {
+        font-size: 0.85rem;
+    }
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
 
     .time-slots {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    .time-slot {
+        padding: 0.55rem 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    .booking-card {
+        padding: 1.25rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .form-group label {
+        font-size: 0.88rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.75rem 0.85rem;
+        font-size: 0.92rem;
+    }
+
+    /* Admin Table: hide more columns */
+    .table th:nth-child(4),
+    .table td:nth-child(4) {
+        display: none;
+        /* Hide service on very small */
+    }
+
+    .admin-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .login-card {
+        padding: 2rem 1.5rem;
     }
 }
