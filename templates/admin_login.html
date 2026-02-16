@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Giriş | Kuaför Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="admin-login-page">
+        <div class="login-card">
+            <div class="icon">🔐</div>
+            <h2>Admin Girişi</h2>
+            <p class="subtitle">Yönetim paneline erişmek için giriş yapın</p>
+
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">👤 Kullanıcı Adı</label>
+                    <input type="text" id="username" placeholder="Kullanıcı adı" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">🔑 Şifre</label>
+                    <input type="password" id="password" placeholder="Şifre" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" id="loginBtn">
+                    Giriş Yap
+                </button>
+            </form>
+
+            <div class="message-box" id="messageBox"></div>
+
+            <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted);">
+                <a href="/" style="color: var(--gold);">← Ana Sayfaya Dön</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const msg = document.getElementById('messageBox');
+
+            btn.disabled = true;
+            btn.textContent = 'Giriş yapılıyor...';
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('username').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    msg.className = 'message-box success';
+                    msg.textContent = '✅ Giriş başarılı! Yönlendiriliyorsunuz...';
+                    setTimeout(() => {
+                        window.location.href = '/admin/panel';
+                    }, 1000);
+                } else {
+                    msg.className = 'message-box error';
+                    msg.textContent = '❌ ' + (data.error || 'Giriş başarısız');
+                    btn.disabled = false;
+                    btn.textContent = 'Giriş Yap';
+                }
+            } catch (err) {
+                msg.className = 'message-box error';
+                msg.textContent = '❌ Sunucu hatası, tekrar deneyin.';
+                btn.disabled = false;
+                btn.textContent = 'Giriş Yap';
+            }
+        }
+    </script>
+</body>
+</html>

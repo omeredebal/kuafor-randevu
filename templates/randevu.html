@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randevu Al | Kuaför Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled">
+        <a href="/" class="navbar-brand">
+            <span class="icon">✂️</span>
+            <span>Kuaför Studio</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/">Ana Sayfa</a></li>
+            <li><a href="/#hizmetler">Hizmetler</a></li>
+            <li><a href="/randevu" class="btn-nav">📅 Randevu Al</a></li>
+        </ul>
+        <button class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- RANDEVU FORMU -->
+    <div class="booking-page">
+        <div class="booking-container">
+            <div class="booking-card">
+                <h2>📅 Randevu Oluştur</h2>
+                <p class="subtitle">Birkaç adımda randevunuzu oluşturun</p>
+
+                <form id="appointmentForm" onsubmit="return submitForm(event)">
+                    <!-- İsim -->
+                    <div class="form-group">
+                        <label for="name">👤 Ad Soyad</label>
+                        <input type="text" id="name" name="name" placeholder="Adınız ve soyadınız" required minlength="2">
+                    </div>
+
+                    <!-- Telefon -->
+                    <div class="form-group">
+                        <label for="phone">📞 Telefon Numarası</label>
+                        <input type="tel" id="phone" name="phone" placeholder="05XX XXX XX XX" required minlength="10" maxlength="15">
+                    </div>
+
+                    <!-- Hizmet -->
+                    <div class="form-group">
+                        <label for="service">💈 Hizmet Seçimi</label>
+                        <select id="service" name="service" required>
+                            <option value="">Hizmet seçiniz...</option>
+                            {% for h in hizmetler %}
+                            <option value="{{ h.ad }}">{{ h.ad }} - ₺{{ h.fiyat }} ({{ h.sure }} dk)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Tarih -->
+                    <div class="form-group">
+                        <label for="date">📆 Tarih</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <!-- Kapasite Bilgisi -->
+                    <div class="kapasite-info" id="kapasiteInfo" style="display: none;">
+                        <span>📊</span>
+                        <span id="kapasiteText"></span>
+                    </div>
+
+                    <!-- Saat Seçimi -->
+                    <div class="form-group" id="timeGroup" style="display: none;">
+                        <label>🕐 Saat Seçimi</label>
+                        <div class="time-slots" id="timeSlots">
+                            <!-- JS ile doldurulacak -->
+                        </div>
+                        <div class="time-slot-legend">
+                            <span><span class="legend-dot musait"></span> Müsait</span>
+                            <span><span class="legend-dot dolu"></span> Dolu</span>
+                            <span><span class="legend-dot gecmis"></span> Geçmiş</span>
+                        </div>
+                        <input type="hidden" id="time" name="time" required>
+                    </div>
+
+                    <!-- Gönder -->
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 1.1rem;" id="submitBtn">
+                        ✅ Randevuyu Onayla
+                    </button>
+                </form>
+
+                <!-- Mesaj -->
+                <div class="message-box" id="messageBox"></div>
+
+                <!-- Başarılı mesaj sonrası -->
+                <div id="successActions" style="display: none; text-align: center; margin-top: 1.5rem;">
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Randevunuz başarıyla oluşturuldu!</p>
+                    <a href="/" class="btn btn-outline btn-sm">🏠 Ana Sayfaya Dön</a>
+                    <button class="btn btn-primary btn-sm" onclick="resetForm()" style="margin-left: 0.5rem;">📅 Yeni Randevu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/randevu.js') }}"></script>
+    <script>
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

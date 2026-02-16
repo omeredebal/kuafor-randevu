@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Kuaför Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar scrolled">
+        <a href="/admin/panel" class="navbar-brand">
+            <span class="icon">✂️</span>
+            <span>Kuaför Studio</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/" target="_blank">🌐 Siteyi Gör</a></li>
+            <li><a href="#" onclick="handleLogout()" style="color: var(--accent);">🚪 Çıkış Yap</a></li>
+        </ul>
+        <button class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <div class="admin-page">
+        <!-- Header -->
+        <div class="admin-header">
+            <h1>📋 Yönetim <span class="highlight">Paneli</span></h1>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-outline btn-sm" onclick="loadData()">🔄 Yenile</button>
+            </div>
+        </div>
+
+        <!-- İstatistikler -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="number" id="statBugun">-</div>
+                <div class="label">Bugünkü Randevu</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="statAktif">-</div>
+                <div class="label">Aktif Randevu</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="statToplam">-</div>
+                <div class="label">Toplam Randevu</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="statIptal">-</div>
+                <div class="label">İptal Edilen</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="statPopuler" style="font-size: 1rem;">-</div>
+                <div class="label">En Popüler Hizmet</div>
+            </div>
+        </div>
+
+        <!-- Tablar -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('liste', this)">📋 Liste Görünümü</button>
+            <button class="tab-btn" onclick="switchTab('takvim', this)">📅 Takvim Görünümü</button>
+        </div>
+
+        <!-- TAB: Liste -->
+        <div class="tab-content active" id="tab-liste">
+            <!-- Filtreler -->
+            <div class="filters">
+                <input type="date" id="filterDate" onchange="loadAppointments()">
+                <select id="filterStatus" onchange="loadAppointments()">
+                    <option value="">Tüm Durumlar</option>
+                    <option value="aktif">Aktif</option>
+                    <option value="iptal">İptal</option>
+                    <option value="tamamlandı">Tamamlandı</option>
+                </select>
+                <button class="btn btn-sm btn-outline" onclick="clearFilters()">Filtreleri Temizle</button>
+            </div>
+
+            <!-- Tablo -->
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ad Soyad</th>
+                            <th>Telefon</th>
+                            <th>Hizmet</th>
+                            <th>Tarih</th>
+                            <th>Saat</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointmentsBody">
+                        <tr>
+                            <td colspan="8">
+                                <div class="loading">
+                                    <div class="spinner"></div>
+                                    Yükleniyor...
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB: Takvim -->
+        <div class="tab-content" id="tab-takvim">
+            <div class="calendar-view">
+                <div class="calendar-header">
+                    <button class="btn btn-sm btn-outline" onclick="changeWeek(-1)">← Önceki Hafta</button>
+                    <h3 id="calendarTitle">Bu Hafta</h3>
+                    <button class="btn btn-sm btn-outline" onclick="changeWeek(1)">Sonraki Hafta →</button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- JS ile doldurulacak -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onay Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <h3 id="modalTitle">Emin misiniz?</h3>
+            <p id="modalMessage">Bu işlem geri alınamaz.</p>
+            <div class="modal-actions">
+                <button class="btn btn-sm btn-outline" onclick="closeModal()">İptal</button>
+                <button class="btn btn-sm btn-danger" id="modalConfirmBtn" onclick="confirmAction()">Onayla</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    <script>
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
